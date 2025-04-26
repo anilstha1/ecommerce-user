@@ -1,7 +1,7 @@
 "use client";
 import useCart from "@/hooks/use-cart";
 import {formatter} from "@/lib/utils";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "./ui/button";
 import axios from "axios";
 import {useSearchParams} from "next/navigation";
@@ -11,6 +11,12 @@ function Summary() {
   const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (searchParams.get("success")) {
@@ -39,6 +45,10 @@ function Summary() {
 
     window.location.href = res.data.url;
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">

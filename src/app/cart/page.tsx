@@ -4,10 +4,20 @@ import CartItem from "@/components/cart-item";
 import Container from "@/components/common/container";
 import Summary from "@/components/summary";
 import useCart from "@/hooks/use-cart";
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 function CartPage() {
   const cart = useCart();
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <div className="bg-white min-h-[calc(100vh-180px)]">
       <Container>
