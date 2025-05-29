@@ -7,13 +7,14 @@ import Gallery from "@/components/gallery";
 import Info from "@/components/info";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 }
 
 async function ProductPage({params}: ProductPageProps) {
-  const product = await getProduct(params.productId);
+  const {productId} = await params;
+  const product = await getProduct(productId);
 
   const suggestedProducts = await getProducts({
     categoryId: product.category.id,

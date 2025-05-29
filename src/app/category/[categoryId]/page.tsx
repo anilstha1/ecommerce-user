@@ -7,7 +7,7 @@ import ProductList from "@/components/product-list";
 import Filters from "@/components/filters";
 
 interface CategoryPageProps {
-  params: {categoryId: string};
+  params: Promise<{categoryId: string}>;
   searchParams: {
     sort?: string;
     minPrice?: string;
@@ -23,8 +23,9 @@ interface ProductsParams {
 }
 
 async function CategoryPage({params, searchParams}: CategoryPageProps) {
+  const {categoryId} = await params;
   const productsParams: ProductsParams = {
-    categoryId: params.categoryId,
+    categoryId,
   };
 
   if (searchParams.sort) {
@@ -41,7 +42,7 @@ async function CategoryPage({params, searchParams}: CategoryPageProps) {
 
   const products = await getProducts(productsParams);
 
-  const category = await getCategory(params.categoryId);
+  const category = await getCategory(categoryId);
 
   return (
     <div className="bg-white">
