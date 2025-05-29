@@ -8,11 +8,11 @@ import Filters from "@/components/filters";
 
 interface CategoryPageProps {
   params: Promise<{categoryId: string}>;
-  searchParams: {
+  searchParams: Promise<{
     sort?: string;
     minPrice?: string;
     maxPrice?: string;
-  };
+  }>;
 }
 
 interface ProductsParams {
@@ -24,20 +24,21 @@ interface ProductsParams {
 
 async function CategoryPage({params, searchParams}: CategoryPageProps) {
   const {categoryId} = await params;
+  const searchParamsResolved = await searchParams;
   const productsParams: ProductsParams = {
     categoryId,
   };
 
-  if (searchParams.sort) {
-    productsParams.sort = searchParams.sort;
+  if (searchParamsResolved.sort) {
+    productsParams.sort = searchParamsResolved.sort;
   }
 
-  if (searchParams.minPrice) {
-    productsParams.minPrice = Number(searchParams.minPrice);
+  if (searchParamsResolved.minPrice) {
+    productsParams.minPrice = Number(searchParamsResolved.minPrice);
   }
 
-  if (searchParams.maxPrice) {
-    productsParams.maxPrice = Number(searchParams.maxPrice);
+  if (searchParamsResolved.maxPrice) {
+    productsParams.maxPrice = Number(searchParamsResolved.maxPrice);
   }
 
   const products = await getProducts(productsParams);
